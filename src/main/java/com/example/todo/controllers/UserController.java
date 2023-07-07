@@ -66,4 +66,15 @@ public class UserController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
+    try {
+      service.deleteUser(id);
+      return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+    } catch (NotFoundException e) {
+      var errorMessage = e.getMessage();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
+  }
 }
