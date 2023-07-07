@@ -36,4 +36,22 @@ public class UserService {
 
     return user;
   }
+
+  public UserModel updateUser(Long id, UserModel user) {
+    var updatedUser = getOneUser(id);
+
+    if (user.getUsername() != null) {
+      updatedUser.setUsername(user.getUsername());
+    }
+    if (user.getEmail() != null) {
+      updatedUser.setEmail(user.getEmail());
+    }
+    if (user.getPassword() != null) {
+      updatedUser.setPassword(user.getPassword());
+    }
+    repository.save(updatedUser);
+
+    return updatedUser;
+  }
+
 }

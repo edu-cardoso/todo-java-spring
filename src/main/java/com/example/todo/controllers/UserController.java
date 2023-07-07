@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -45,6 +44,23 @@ public class UserController {
     try {
       var user = service.getOneUser(id);
       return ResponseEntity.ok(user);
+    } catch (NotFoundException e) {
+      var errorMessage = e.getMessage();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserModel user) {
+    var result = service.getUserByEmail(user.getEmail());
+
+    if (result != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already used");
+    }
+
+    try {
+      var updatedUser = service.updateUser(id, user);
+      return ResponseEntity.ok(updatedUser);
     } catch (NotFoundException e) {
       var errorMessage = e.getMessage();
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
