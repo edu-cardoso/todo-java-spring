@@ -1,6 +1,6 @@
 package com.example.todo.services;
 
-import com.example.todo.models.UserModel;
+import com.example.todo.entities.User;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,35 +15,35 @@ public class UserService {
   @Autowired
   private UserRepository repository;
 
-  public UserModel createUser(UserModel user) {
+  public User createUser(User user) {
     return repository.save(user);
   }
 
-  public List<UserModel> getAllUsers() {
+  public List<User> getAllUsers() {
     return repository.findAll();
   }
 
-  public UserModel getOneUser(Long id) {
-    Optional<UserModel> user = repository.findById(id);
+  public User getOneUser(Long id) {
+    Optional<User> user = repository.findById(id);
     if (user.isEmpty()) {
       throw new NotFoundException("User not found");
     }
     return user.get();
   }
 
-  public UserModel getUserByEmail(String email) {
+  public User getUserByEmail(String email) {
     var user = repository.findByEmail(email);
 
     return user;
   }
 
-  public UserModel getUserByUsername(String username) {
+  public User getUserByUsername(String username) {
     var user = repository.findByUsername(username);
 
     return user;
   }
 
-  public UserModel updateUser(Long id, UserModel user) {
+  public User updateUser(Long id, User user) {
     var updatedUser = getOneUser(id);
 
     if (user.getUsername() != null) {

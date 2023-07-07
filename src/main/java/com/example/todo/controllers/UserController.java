@@ -2,7 +2,7 @@ package com.example.todo.controllers;
 
 import com.example.todo.dtos.UserDto;
 import com.example.todo.services.UserService;
-import com.example.todo.models.UserModel;
+import com.example.todo.entities.User;
 import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -29,13 +29,13 @@ public class UserController {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
     }
 
-    var userModel = new UserModel();
+    var userModel = new User();
     BeanUtils.copyProperties(userDto, userModel);
     return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(userModel));
   }
 
   @GetMapping
-  public ResponseEntity<List<UserModel>> getAllUsers() {
+  public ResponseEntity<List<User>> getAllUsers() {
     var users = service.getAllUsers();
     return ResponseEntity.status(HttpStatus.OK).body(users);
   }
@@ -52,7 +52,7 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserModel user) {
+  public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user) {
     var result = service.getUserByEmail(user.getEmail());
     var userUsername = service.getUserByUsername(user.getUsername());
     if (result != null | userUsername != null) {

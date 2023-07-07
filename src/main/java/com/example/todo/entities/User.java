@@ -1,4 +1,4 @@
-package com.example.todo.models;
+package com.example.todo.entities;
 
 import jakarta.persistence.*;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="users")
-public class UserModel implements Serializable {
+public class User implements Serializable {
   private static final Long serialVersionUID = 1L;
 
   @Id
@@ -16,7 +16,7 @@ public class UserModel implements Serializable {
   private String email;
   private String password;
 
-  public UserModel() {
+  public User() {
   }
 
   public Long getId() {
