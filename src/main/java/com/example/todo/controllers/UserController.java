@@ -54,9 +54,9 @@ public class UserController {
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserModel user) {
     var result = service.getUserByEmail(user.getEmail());
-
-    if (result != null) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already used");
+    var userUsername = service.getUserByUsername(user.getUsername());
+    if (result != null | userUsername != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or username already used");
     }
 
     try {
