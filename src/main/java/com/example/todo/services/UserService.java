@@ -37,6 +37,12 @@ public class UserService {
     return user;
   }
 
+  public UserModel getUserByUsername(String username) {
+    var user = repository.findByUsername(username);
+
+    return user;
+  }
+
   public UserModel updateUser(Long id, UserModel user) {
     var updatedUser = getOneUser(id);
 

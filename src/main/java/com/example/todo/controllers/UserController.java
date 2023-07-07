@@ -22,9 +22,10 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userDto) {
-    var user = service.getUserByEmail(userDto.email());
+    var userEmail = service.getUserByEmail(userDto.email());
+    var userUsername = service.getUserByUsername(userDto.username());
 
-    if (user != null) {
+    if (userEmail != null | userUsername != null ) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
     }
 
