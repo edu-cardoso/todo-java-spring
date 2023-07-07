@@ -22,10 +22,16 @@ public class UserController {
   private UserService service;
 
   @PostMapping
-  public ResponseEntity<UserModel> createUser(@RequestBody @Valid UserDto userDto) {
-    var user = new UserModel();
-    BeanUtils.copyProperties(userDto, user);
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(user));
+  public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userDto) {
+    var user = service.getUserByEmail(userDto.email());
+
+    if (user != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+    }
+
+    var userModel = new UserModel();
+    BeanUtils.copyProperties(userDto, userModel);
+    return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(userModel));
   }
 
   @GetMapping

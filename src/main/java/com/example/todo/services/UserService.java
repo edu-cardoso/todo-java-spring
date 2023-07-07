@@ -30,4 +30,10 @@ public class UserService {
     }
     return user.get();
   }
+
+  public UserModel getUserByEmail(String email) {
+    var user = repository.findByEmail(email);
+
+    return user;
+  }
 }
