@@ -31,12 +31,6 @@ public class UserService {
     return user.get();
   }
 
-  public User getUserByEmail(String email) {
-    var user = repository.findByEmail(email);
-
-    return user;
-  }
-
   public User getUserByUsername(String username) {
     var user = repository.findByUsername(username);
 

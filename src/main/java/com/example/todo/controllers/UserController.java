@@ -1,6 +1,7 @@
 package com.example.todo.controllers;
 
 import com.example.todo.dtos.UserDto;
+import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
 import com.example.todo.entities.User;
 import com.example.todo.services.exceptions.NotFoundException;
@@ -20,19 +21,8 @@ public class UserController {
   @Autowired
   private UserService service;
 
-  @PostMapping
-  public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userDto) {
-    var userEmail = service.getUserByEmail(userDto.email());
-    var userUsername = service.getUserByUsername(userDto.username());
-
-    if (userEmail != null | userUsername != null ) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
-    }
-
-    var userModel = new User();
-    BeanUtils.copyProperties(userDto, userModel);
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(userModel));
-  }
+  @Autowired
+  private UserRepository repository;
 
   @GetMapping
   public ResponseEntity<List<User>> getAllUsers() {
@@ -53,9 +43,10 @@ public class UserController {
 
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user) {
-    var result = service.getUserByEmail(user.getEmail());
-    var userUsername = service.getUserByUsername(user.getUsername());
-    if (result != null | userUsername != null) {
+    var userByUsername = service.getUserByUsername(user.getUsername());
+    var userByEmail = repository.findByEmail(user.getEmail());
+
+    if (userByUsername != null | userByEmail != null) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or username already used");
     }
 
