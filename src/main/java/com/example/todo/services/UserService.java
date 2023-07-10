@@ -4,6 +4,7 @@ import com.example.todo.entities.User;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,8 @@ public class UserService {
       updatedUser.setEmail(user.getEmail());
     }
     if (user.getPassword() != null) {
-      updatedUser.setPassword(user.getPassword());
+      var encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+      updatedUser.setPassword(encryptedPassword);
     }
     repository.save(updatedUser);
 
