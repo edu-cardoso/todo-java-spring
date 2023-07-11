@@ -16,7 +16,7 @@ public class User implements Serializable, UserDetails {
   private static final Long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
   private String username;
   private String email;
