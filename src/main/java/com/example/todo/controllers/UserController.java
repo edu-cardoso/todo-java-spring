@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -27,6 +28,7 @@ public class UserController {
   @GetMapping
   public ResponseEntity<List<User>> getAllUsers() {
     var users = service.getAllUsers();
+
     return ResponseEntity.status(HttpStatus.OK).body(users);
   }
 

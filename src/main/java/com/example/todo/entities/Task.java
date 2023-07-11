@@ -10,7 +10,7 @@ public class Task implements Serializable {
   private static final Long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private Boolean finished;
