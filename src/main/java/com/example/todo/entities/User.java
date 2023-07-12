@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name="users")
-
 public class User implements Serializable, UserDetails {
   private static final Long serialVersionUID = 1L;
 
