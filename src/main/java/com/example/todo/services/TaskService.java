@@ -4,6 +4,7 @@ import com.example.todo.entities.Task;
 import com.example.todo.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,5 +49,16 @@ public class TaskService {
     repository.save(updatedTask);
 
     return updatedTask;
+  }
+
+  @DeleteMapping("/{id}")
+  public Object deleteTask(Long id) {
+    Optional<Task> optionalTask = repository.findById(id);
+    if (optionalTask.isEmpty()) {
+      return null;
+    }
+    repository.deleteById(id);
+
+    return optionalTask;
   }
 }
