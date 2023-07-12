@@ -37,7 +37,7 @@ public class TaskController {
     return ResponseEntity.status(HttpStatus.OK).body(service.getAllTasks());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/user/{id}")
   public ResponseEntity<Object> getTasksByUser(@PathVariable Long id) {
     try {
       userService.getOneUser(id);
