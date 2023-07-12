@@ -2,8 +2,9 @@ package com.example.todo.controllers;
 
 import com.example.todo.dtos.TaskDto;
 import com.example.todo.entities.Task;
-import com.example.todo.entities.User;
 import com.example.todo.services.TaskService;
+import com.example.todo.services.UserService;
+import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TaskController {
   @Autowired
   private TaskService service;
 
+  @Autowired
+  private UserService userService;
+
   @PostMapping
   public ResponseEntity<Object> createTask(@RequestBody @Valid TaskDto taskDto) {
     var task = new Task();
@@ -31,5 +35,16 @@ public class TaskController {
   @GetMapping
   public ResponseEntity<List<Task>> getAllTasks() {
     return ResponseEntity.status(HttpStatus.OK).body(service.getAllTasks());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Object> getTasksByUser(@PathVariable Long id) {
+    try {
+      userService.getOneUser(id);
+      return ResponseEntity.status(HttpStatus.OK).body(service.getTasksByUser(id));
+    } catch (NotFoundException e) {
+      var errorMessage = e.getMessage();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
   }
 }

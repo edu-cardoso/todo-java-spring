@@ -1,6 +1,5 @@
 package com.example.todo.entities;
 
-
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,6 +14,7 @@ public class Task implements Serializable {
   private Long id;
   private String name;
   private Boolean finished;
+  private Long userId;
 
   public Task() {
   }
@@ -43,12 +43,21 @@ public class Task implements Serializable {
     this.finished = finished;
   }
 
+  public Long getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
+
   @Override
   public String toString() {
     return "Task{" +
             "id=" + id +
             ", name='" + name + '\'' +
             ", finished=" + finished +
+            ", userId=" + userId +
             '}';
   }
 }
