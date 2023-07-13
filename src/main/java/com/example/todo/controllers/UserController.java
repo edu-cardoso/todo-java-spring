@@ -1,6 +1,7 @@
 package com.example.todo.controllers;
 
 import com.example.todo.dtos.UserDto;
+import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
 import com.example.todo.entities.User;
@@ -26,7 +27,7 @@ public class UserController {
   private UserRepository repository;
 
   @GetMapping
-  public ResponseEntity<List<User>> getAllUsers() {
+  public ResponseEntity<List<UserResponseDto>> getAllUsers() {
     var users = service.getAllUsers();
 
     return ResponseEntity.status(HttpStatus.OK).body(users);

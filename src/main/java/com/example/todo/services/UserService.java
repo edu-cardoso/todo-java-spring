@@ -1,5 +1,6 @@
 package com.example.todo.services;
 
+import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.entities.User;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.exceptions.NotFoundException;
@@ -20,8 +21,14 @@ public class UserService {
     return repository.save(user);
   }
 
-  public List<User> getAllUsers() {
-    return repository.findAll();
+  public List<UserResponseDto> getAllUsers() {
+    var result = repository.findAll();
+
+    var users = result.stream().map(UserResponseDto::new).toList();
+
+    System.out.println(users);
+
+    return users;
   }
 
   public User getOneUser(Long id) {
