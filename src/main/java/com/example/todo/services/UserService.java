@@ -17,18 +17,10 @@ public class UserService {
   @Autowired
   private UserRepository repository;
 
-  public User createUser(User user) {
-    return repository.save(user);
-  }
-
   public List<UserResponseDto> getAllUsers() {
     var result = repository.findAll();
 
-    var users = result.stream().map(UserResponseDto::new).toList();
-
-    System.out.println(users);
-
-    return users;
+    return result.stream().map(UserResponseDto::new).toList();
   }
 
   public User getOneUser(Long id) {

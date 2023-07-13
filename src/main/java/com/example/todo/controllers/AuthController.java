@@ -3,6 +3,7 @@ package com.example.todo.controllers;
 import com.example.todo.dtos.AuthDto;
 import com.example.todo.dtos.TokenJwtDto;
 import com.example.todo.dtos.UserDto;
+import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.entities.User;
 import com.example.todo.infra.security.TokenService;
 import com.example.todo.repositories.UserRepository;
@@ -38,7 +39,6 @@ public class AuthController {
   public ResponseEntity login(@RequestBody @Valid AuthDto user) {
     var usernamePassword = new UsernamePasswordAuthenticationToken(user.email(), user.password());
     var authentication = manager.authenticate(usernamePassword);
-    System.out.println(authentication);
     var token = tokenService.generateToken((User) authentication.getPrincipal());
 
     return ResponseEntity.ok(new TokenJwtDto(token));
@@ -58,7 +58,7 @@ public class AuthController {
 
     repository.save(newUser);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(newUser));
   }
 
 }

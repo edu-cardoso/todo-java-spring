@@ -1,5 +1,6 @@
 package com.example.todo.controllers;
 
+import com.example.todo.dtos.TaskDto;
 import com.example.todo.dtos.UserDto;
 import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.repositories.UserRepository;
