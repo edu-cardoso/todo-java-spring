@@ -4,6 +4,7 @@ import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.entities.User;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.exceptions.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,21 +37,24 @@ public class UserService {
   }
 
   public User updateUser(Long id, User user) {
-    var updatedUser = getOneUser(id);
+    try {
+      var updatedUser = repository.getReferenceById(id);
 
-    if (user.getUsername() != null) {
-      updatedUser.setUsername(user.getUsername());
+      if (user.getUsername() != null) {
+        updatedUser.setUsername(user.getUsername());
+      }
+      if (user.getEmail() != null) {
+        updatedUser.setEmail(user.getEmail());
+      }
+      if (user.getPassword() != null) {
+        var encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        updatedUser.setPassword(encryptedPassword);
+      }
+      repository.save(updatedUser);
+      return updatedUser;
+    } catch (EntityNotFoundException e) {
+        throw new NotFoundException("User not found");
     }
-    if (user.getEmail() != null) {
-      updatedUser.setEmail(user.getEmail());
-    }
-    if (user.getPassword() != null) {
-      var encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-      updatedUser.setPassword(encryptedPassword);
-    }
-    repository.save(updatedUser);
-
-    return updatedUser;
   }
 
   public void deleteUser(Long id) {
