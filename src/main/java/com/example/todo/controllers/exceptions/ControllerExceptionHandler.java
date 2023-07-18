@@ -1,5 +1,6 @@
 package com.example.todo.controllers.exceptions;
 
+import com.example.todo.services.exceptions.AlreadyExistsException;
 import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -17,5 +18,14 @@ public class ControllerExceptionHandler {
     err.setMessage(e.getMessage());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+  }
+
+  @ExceptionHandler(AlreadyExistsException.class)
+  public ResponseEntity<StandardError> entityAlreadyExists(AlreadyExistsException e, HttpServletRequest request) {
+    var err = new StandardError();
+    err.setStatus(HttpStatus.CONFLICT.value());
+    err.setMessage(e.getMessage());
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
   }
 }

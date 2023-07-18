@@ -7,6 +7,7 @@ import com.example.todo.services.exceptions.AlreadyExistsException;
 import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +33,17 @@ public class UserService {
   }
 
   public User getUserByUsername(String username) {
-    var user = repository.findByUsername(username);
-
-    return user;
+    return repository.findByUsername(username);
   }
 
-  public User updateUser(Long id, User user) {
+  public UserDetails getUserByEmail(String email) {
+    return repository.findByEmail(email);
+  }
+
+  public UserResponseDto updateUser(Long id, User user) {
     try {
-      var updatedUser = repository.getReferenceById(id);
+      var result = repository.findById(id);
+      var updatedUser = result.get();
 
       if (user.getUsername() != null) {
         updatedUser.setUsername(user.getUsername());
@@ -52,7 +56,7 @@ public class UserService {
         updatedUser.setPassword(encryptedPassword);
       }
       repository.save(updatedUser);
-      return updatedUser;
+      return new UserResponseDto(updatedUser);
     } catch (EntityNotFoundException e) {
         throw new NotFoundException("User not found");
     }

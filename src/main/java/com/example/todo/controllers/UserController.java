@@ -4,6 +4,7 @@ import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
 import com.example.todo.entities.User;
+import com.example.todo.services.exceptions.AlreadyExistsException;
 import com.example.todo.services.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,19 +40,14 @@ public class UserController {
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user) {
     var userByUsername = service.getUserByUsername(user.getUsername());
-    var userByEmail = repository.findByEmail(user.getEmail());
+    var userByEmail = service.getUserByEmail(user.getEmail());
 
     if (userByUsername != null | userByEmail != null) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or username already used");
+      throw new AlreadyExistsException("Email or username already used");
     }
 
-    try {
-      var updatedUser = service.updateUser(id, user);
-      return ResponseEntity.ok(updatedUser);
-    } catch (NotFoundException e) {
-      var errorMessage = e.getMessage();
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
+    var updatedUser = service.updateUser(id, user);
+    return ResponseEntity.ok(updatedUser);
   }
 
   @DeleteMapping("/{id}")
