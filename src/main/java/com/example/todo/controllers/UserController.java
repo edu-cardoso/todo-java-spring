@@ -1,21 +1,17 @@
 package com.example.todo.controllers;
 
-import com.example.todo.dtos.TaskDto;
-import com.example.todo.dtos.UserDto;
 import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
 import com.example.todo.entities.User;
 import com.example.todo.services.exceptions.NotFoundException;
-import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping(value = "/users")

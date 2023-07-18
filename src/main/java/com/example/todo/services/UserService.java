@@ -23,12 +23,10 @@ public class UserService {
     return result.stream().map(UserResponseDto::new).toList();
   }
 
-  public User getOneUser(Long id) {
+  public UserResponseDto getOneUser(Long id) {
     Optional<User> user = repository.findById(id);
-    if (user.isEmpty()) {
-      throw new NotFoundException("User not found");
-    }
-    return user.get();
+    user.orElseThrow(() -> new NotFoundException("User not found"));
+    return new UserResponseDto(user.get());
   }
 
   public User getUserByUsername(String username) {
