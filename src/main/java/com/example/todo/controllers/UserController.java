@@ -31,14 +31,9 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getOneUser(@PathVariable Long id) {
-    try {
+  public ResponseEntity<UserResponseDto> getOneUser(@PathVariable Long id) {
       var user = service.getOneUser(id);
-      return ResponseEntity.ok(user);
-    } catch (NotFoundException e) {
-      var errorMessage = e.getMessage();
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
+      return ResponseEntity.ok().body(user);
   }
 
   @PutMapping("/{id}")
