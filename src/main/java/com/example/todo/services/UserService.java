@@ -3,6 +3,7 @@ package com.example.todo.services;
 import com.example.todo.dtos.UserResponseDto;
 import com.example.todo.entities.User;
 import com.example.todo.repositories.UserRepository;
+import com.example.todo.services.exceptions.AlreadyExistsException;
 import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
