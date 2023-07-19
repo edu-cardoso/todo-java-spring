@@ -27,10 +27,7 @@ public class TaskService {
   }
 
   public Object getTasksByUser(Long id) {
-    var tasks = repository.findAllByUserId(id);
-    System.out.println(tasks);
-
-    return tasks;
+    return repository.findAllByUserId(id);
   }
 
   public Task updateTask(Long id, Task task) {

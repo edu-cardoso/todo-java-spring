@@ -39,13 +39,8 @@ public class TaskController {
 
   @GetMapping("/user/{id}")
   public ResponseEntity<Object> getTasksByUser(@PathVariable Long id) {
-    try {
       userService.getOneUser(id);
       return ResponseEntity.status(HttpStatus.OK).body(service.getTasksByUser(id));
-    } catch (NotFoundException e) {
-      var errorMessage = e.getMessage();
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
   }
 
   @PutMapping("/{id}")
