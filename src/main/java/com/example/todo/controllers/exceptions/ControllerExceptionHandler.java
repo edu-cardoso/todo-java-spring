@@ -35,7 +35,7 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
     var err = new StandardError();
-    err.setStatus(HttpStatus.CONFLICT.value());
+    err.setStatus(HttpStatus.BAD_REQUEST.value());
     err.setMessage(e.getDetailMessageArguments()[1].toString().replaceAll("\\[|\\]", ""));
 
     return ResponseEntity.status(HttpStatus.CONFLICT).body(err);

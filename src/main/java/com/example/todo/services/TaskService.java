@@ -2,6 +2,7 @@ package com.example.todo.services;
 
 import com.example.todo.entities.Task;
 import com.example.todo.repositories.TaskRepository;
+import com.example.todo.services.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,13 +53,10 @@ public class TaskService {
   }
 
   @DeleteMapping("/{id}")
-  public Object deleteTask(Long id) {
-    Optional<Task> optionalTask = repository.findById(id);
-    if (optionalTask.isEmpty()) {
-      return null;
+  public void deleteTask(Long id) {
+    if (!repository.existsById(id)) {
+      throw new NotFoundException("Task not found");
     }
     repository.deleteById(id);
-
-    return optionalTask;
   }
 }
