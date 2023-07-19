@@ -3,6 +3,7 @@ package com.example.todo.services;
 import com.example.todo.entities.Task;
 import com.example.todo.repositories.TaskRepository;
 import com.example.todo.services.exceptions.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,23 +34,18 @@ public class TaskService {
   }
 
   public Task updateTask(Long id, Task task) {
-    Optional<Task> optionalTask = repository.findById(id);
-    if (optionalTask.isEmpty()) {
-      return null;
+    try {
+      var updatedTask = repository.getReferenceById(id);
+      if (task.getName() != null) {
+        updatedTask.setName(task.getName());
+      }
+      if (task.getFinished() != null) {
+        updatedTask.setFinished(task.getFinished());
+      }
+      return repository.save(updatedTask);
+    } catch (EntityNotFoundException e) {
+      throw new NotFoundException("Task not found");
     }
-
-    var updatedTask = optionalTask.get();
-
-    if (task.getName() != null) {
-      updatedTask.setName(task.getName());
-    }
-    if (task.getFinished() != null) {
-      updatedTask.setFinished(task.getFinished());
-    }
-
-    repository.save(updatedTask);
-
-    return updatedTask;
   }
 
   @DeleteMapping("/{id}")

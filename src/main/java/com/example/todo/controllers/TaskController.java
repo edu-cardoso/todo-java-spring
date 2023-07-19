@@ -51,9 +51,6 @@ public class TaskController {
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateTask(@PathVariable Long id, @RequestBody Task task) {
     var updatedTask = service.updateTask(id, task);
-    if (updatedTask == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
-    }
     return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
   }
 
