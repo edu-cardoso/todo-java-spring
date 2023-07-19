@@ -8,13 +8,16 @@ import com.example.todo.entities.User;
 import com.example.todo.infra.security.TokenService;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
+import com.example.todo.services.exceptions.AlreadyExistsException;
 import jakarta.validation.Valid;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +53,7 @@ public class AuthController {
     var userByEmail = repository.findByEmail(user.email());
 
     if (userByEmail != null | userByUsername != null) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+      throw new AlreadyExistsException("Email or username already used");
     }
 
     var encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
@@ -60,5 +63,4 @@ public class AuthController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(newUser));
   }
-
 }
