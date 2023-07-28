@@ -1,6 +1,5 @@
 package com.example.todo.controllers.exceptions;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.todo.services.exceptions.AlreadyExistsException;
 import com.example.todo.services.exceptions.InvalidAuthException;
 import com.example.todo.services.exceptions.NotFoundException;
@@ -10,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.Arrays;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
