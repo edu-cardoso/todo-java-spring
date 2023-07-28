@@ -1,6 +1,8 @@
 package com.example.todo.controllers.exceptions;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.todo.services.exceptions.AlreadyExistsException;
+import com.example.todo.services.exceptions.InvalidAuthException;
 import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,15 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
   }
 
+  @ExceptionHandler(InvalidAuthException.class)
+  public ResponseEntity<StandardError> invalidAuth(InvalidAuthException e, HttpServletRequest request) {
+    var err = new StandardError();
+    err.setStatus(HttpStatus.BAD_REQUEST.value());
+    err.setMessage(e.getMessage());
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+  }
+
   @ExceptionHandler(AlreadyExistsException.class)
   public ResponseEntity<StandardError> entityAlreadyExists(AlreadyExistsException e, HttpServletRequest request) {
     var err = new StandardError();
@@ -38,6 +49,6 @@ public class ControllerExceptionHandler {
     err.setStatus(HttpStatus.BAD_REQUEST.value());
     err.setMessage(e.getDetailMessageArguments()[1].toString().replaceAll("\\[|\\]", ""));
 
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
   }
 }

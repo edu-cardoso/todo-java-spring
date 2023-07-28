@@ -6,11 +6,10 @@ import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Service
 public class TaskService {
@@ -33,6 +32,7 @@ public class TaskService {
   public Task updateTask(Long id, Task task) {
     try {
       var updatedTask = repository.getReferenceById(id);
+      System.out.println(updatedTask);
       if (task.getName() != null) {
         updatedTask.setName(task.getName());
       }

@@ -9,18 +9,17 @@ import com.example.todo.infra.security.TokenService;
 import com.example.todo.repositories.UserRepository;
 import com.example.todo.services.UserService;
 import com.example.todo.services.exceptions.AlreadyExistsException;
+import com.example.todo.services.exceptions.InvalidAuthException;
+import com.example.todo.services.exceptions.NotFoundException;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,11 +39,15 @@ public class AuthController {
 
   @PostMapping(value = "/login")
   public ResponseEntity login(@RequestBody @Valid AuthDto user) {
-    var usernamePassword = new UsernamePasswordAuthenticationToken(user.email(), user.password());
-    var authentication = manager.authenticate(usernamePassword);
-    var token = tokenService.generateToken((User) authentication.getPrincipal());
+    try {
+      var usernamePassword = new UsernamePasswordAuthenticationToken(user.email(), user.password());
+      var authentication = manager.authenticate(usernamePassword);
+      var token = tokenService.generateToken((User) authentication.getPrincipal());
+      return ResponseEntity.ok(new TokenJwtDto(token));
+    } catch (Exception e) {
+        throw new InvalidAuthException("Invalid user");
+    }
 
-    return ResponseEntity.ok(new TokenJwtDto(token));
   }
 
   @PostMapping(value = "/register")
